@@ -188,7 +188,7 @@ app.get('/settings', (req, res) => {
 //              MAIN PAGE
 // =====================================
 app.get('/docs', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/index.html'));
+  res.sendFile(path.join(__dirname, 'src/home.html'));
 });
 
 // =====================================
