@@ -70,9 +70,7 @@ module.exports = {
       res.json({
         status: true,
         creator: "AanzDigital",
-        session_id: soal.session_id,
-        soal: soal.soal,
-        note: "Gunakan /games/asahotak/answer?apikey=&session_id="
+        soal: soal.soal
       });
 
     } catch (err) {
