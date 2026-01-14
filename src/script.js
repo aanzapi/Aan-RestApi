@@ -12,7 +12,7 @@ const categoryIcons = {
     'Tools': 'build',
     'Orderkuota': 'paid',
     'AI Tools': 'psychology',
-    'Games': 'GameTools'
+    'Games': 'Games'
 };
 
 // Initialize app
