@@ -32,7 +32,7 @@ async function fetchKecocokanNama(nama1, nama2) {
 module.exports = {
   name: "KecocokanNamaPasangan",
   desc: "Primbon Kecocokan Nama Pasangan",
-  category: "Game",
+  category: "Primbon",
 
   /**
    * ===========================
