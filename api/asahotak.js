@@ -1,13 +1,13 @@
 const fetch = require("node-fetch");
 
-// =======================
-// GLOBAL SESSION STORAGE
-// =======================
+// ===============================
+// SESSION STORAGE
+// ===============================
 global.asahOtakSession = global.asahOtakSession || {};
 
-// =======================
-// FETCH DARI SOURCE API
-// =======================
+// ===============================
+// FETCH SOURCE API
+// ===============================
 async function fetchAsahOtak() {
   const res = await fetch("https://api.siputzx.my.id/api/games/asahotak", {
     method: "GET",
@@ -18,72 +18,61 @@ async function fetchAsahOtak() {
   });
 
   if (!res.ok) {
-    throw new Error(`HTTP error ${res.status}`);
+    throw new Error(`Source API error ${res.status}`);
   }
 
   return await res.json();
 }
 
-// =======================
-// GENERATE SOAL (HIDE ANSWER)
-// =======================
-async function generateSoal() {
-  const apiData = await fetchAsahOtak();
+// ===============================
+// GET SOAL (HIDE ANSWER)
+// ===============================
+async function getSoal() {
+  const data = await fetchAsahOtak();
 
-  if (!apiData.status) {
-    throw new Error("Source API error");
+  if (!data?.status || !data?.data) {
+    throw new Error("Invalid source response");
   }
 
-  const sessionId = Math.random().toString(36).substring(2, 10);
+  const sessionId = Math.random().toString(36).slice(2, 10);
 
   global.asahOtakSession[sessionId] = {
-    soal: apiData.data.soal,
-    jawaban: apiData.data.jawaban,
-    created_at: Date.now()
+    soal: data.data.soal,
+    jawaban: data.data.jawaban,
+    created: Date.now()
   };
 
   return {
     session_id: sessionId,
-    soal: apiData.data.soal
+    soal: data.data.soal
   };
 }
 
-// =======================
-// MAIN EXPORT (2 ENDPOINT)
-// =======================
+// ===============================
+// EXPORT
+// ===============================
 module.exports = {
   name: "AsahOtak",
-  desc: "Game Asah Otak Full Version",
+  desc: "Game Asah Otak",
   category: "Games",
 
   /**
-   * ======================
+   * ===========================
    * GET SOAL
-   * /games/asahotak?apikey=xxx
-   * ======================
+   * ===========================
    */
-  path: "/games/asahotak",
+  path: "/games/asahotak?apikey=",
 
   async run(req, res) {
-    const { apikey } = req.query;
-
-    if (!apikey || !global.apikey?.includes(apikey)) {
-      return res.json({
-        status: false,
-        error: "Invalid API key"
-      });
-    }
-
     try {
-      const soal = await generateSoal();
+      const soal = await getSoal();
 
       res.json({
         status: true,
-        game: "Asah Otak",
+        creator: "AanzDigital",
         session_id: soal.session_id,
         soal: soal.soal,
-        hint: "Gunakan /games/asahotak/answer untuk melihat jawaban",
-        timestamp: new Date().toISOString()
+        note: "Gunakan /games/asahotak/answer?apikey=&session_id="
       });
 
     } catch (err) {
@@ -95,23 +84,15 @@ module.exports = {
   },
 
   /**
-   * ======================
-   * CEK JAWABAN
-   * /games/asahotak/answer?apikey=xxx&session_id=xxx
-   * ======================
+   * ===========================
+   * GET JAWABAN
+   * ===========================
    */
   answer: {
-    path: "/games/asahotak/answer",
+    path: "/games/asahotak/answer?apikey=&session_id=",
 
     async run(req, res) {
-      const { apikey, session_id } = req.query;
-
-      if (!apikey || !global.apikey?.includes(apikey)) {
-        return res.json({
-          status: false,
-          error: "Invalid API key"
-        });
-      }
+      const { session_id } = req.query;
 
       if (!session_id) {
         return res.json({
@@ -131,12 +112,11 @@ module.exports = {
 
       res.json({
         status: true,
+        creator: "AanzDigital",
         soal: session.soal,
-        jawaban: session.jawaban,
-        solved_at: new Date().toISOString()
+        jawaban: session.jawaban
       });
 
-      // hapus session setelah dijawab
       delete global.asahOtakSession[session_id];
     }
   }
