@@ -12,7 +12,8 @@ const categoryIcons = {
     'Tools': 'build',
     'Orderkuota': 'paid',
     'AI Tools': 'psychology',
-    'Games': 'sports_esports'
+    'Games': 'sports_esports',
+    'Primbon' : 'share'
 };
 
 // Initialize app
