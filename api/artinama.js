@@ -28,7 +28,7 @@ async function fetchArtiNama(nama) {
 module.exports = {
   name: "ArtiNama",
   desc: "Primbon Arti Nama",
-  category: "Game",
+  category: "Primbon",
 
   /**
    * ===========================
