@@ -11,7 +11,8 @@ const categoryIcons = {
     'Stalker': 'visibility',
     'Tools': 'build',
     'Orderkuota': 'paid',
-    'AI Tools': 'psychology'
+    'AI Tools': 'psychology',
+    'Games': 'GameTools'
 };
 
 // Initialize app
