@@ -13,7 +13,7 @@ const categoryIcons = {
     'Orderkuota': 'paid',
     'AI Tools': 'psychology',
     'Games': 'sports_esports',
-    'Primbon' : 'share'
+    'Primbon' : 'auto_stories'
 };
 
 // Initialize app
